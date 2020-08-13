@@ -24,7 +24,8 @@ function _createMeme(imgId) {
         selectedImgId: imgId,
         selectedLineIdx: gLineIdx,
         lines: [{
-            txt:' ',
+            txt:'impact',
+            font:' ',
             size: 20,
             align: 'right',
             color: 'red'
@@ -50,9 +51,15 @@ function setFontSize(fontSize){
 
 function setTxtAlign(txtAlign){
     gMeme.lines[gLineIdx].align=txtAlign
-
 }
 
+function setFont(font){
+    gMeme.lines[gLineIdx].font=font
+}
+
+function setColor(color){
+    gMeme.lines[gLineIdx].color=color
+}
 
 //---------------------------
 

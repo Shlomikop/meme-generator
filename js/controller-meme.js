@@ -6,7 +6,10 @@ var gCtx = gCanvas.getContext('2d');
 
 let gCurrText = '';
 let gFontSize = 20
-
+let gTxtAlign = 'left'
+let gFont = 'impact'
+let gStrokeColor = 'black'
+let gFillColor = 'white'
 // elInput.addEventListener('input', updateText); 
 
 
@@ -66,10 +69,14 @@ function onTextInput(txt) {
 
 function drawText(text, x = 20, y = 40) {
     gCtx.lineWidth = '2';
-    gCtx.strokeStyle = 'black';
-    gCtx.fillStyle = 'white';
-    gCtx.font = `${gFontSize}px Impact`;
-    gCtx.textAlign = 'left';
+    gCtx.strokeStyle = `${gStrokeColor}`;
+    gCtx.fillStyle = `${gFillColor}`;
+    gCtx.font = `${gFontSize}px ${gFont}`;
+
+    if (gTxtAlign === 'right') x = gCanvas.width - 20
+    if (gTxtAlign === 'center') x = gCanvas.width / 2
+
+    gCtx.textAlign = `${gTxtAlign}`;
     gCtx.fillText(text, x, y);
     gCtx.strokeText(text, x, y);
 
@@ -93,7 +100,7 @@ function onSetFontSize(btn) {
         gFontSize -= 10
         renderCanvas()
     }
-    fontSize=gFontSize
+    fontSize = gFontSize
     setFontSize(fontSize)
 }
 
@@ -111,5 +118,27 @@ function onTextAlign(val) {
         txtAlign = 'right'
         setTxtAlign(txtAlign)
     }
+    gTxtAlign = txtAlign
+    renderCanvas()
+}
+
+function onFontSelection(font) {
+    setFont(font)
+    gFont = font
+    renderCanvas()
+}
+
+function setStrokeColor(ev) {
+    const color = ev.target.value
+    gStrokeColor = color
+    renderCanvas()
+
+}
+
+function setFillColor(ev) {
+    const color = ev.target.value
+    gFillColor=color
+    setColor(color)
+    renderCanvas()
 
 }

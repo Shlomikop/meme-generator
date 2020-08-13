@@ -64,7 +64,8 @@
                 <canvas class="canvas" id="my-canvas"></canvas>
                 <!-- THE EDITOR DIV WITH ALL THE BUTTONS -->
                 <div class="image-editor grid">
-                    <input class="line-text" type="text" oninput="onTextInput(this.value)" placeholder="Enter text here..">
+                    <input class="line-text" type="text" oninput="onTextInput(this.value)"
+                        placeholder="Enter text here..">
                     <button class="btn-switch" onclick="onSwitchLine()">&#8645</button>
                     <button class="btn-add" onclick="onAddLine()">&#43</button>
                     <button class="btn-clear" onclick="onClearCanvas()">Clear</button>
@@ -75,13 +76,16 @@
                         <button class="ac btn" value="AC" onclick="onTextAlign(this.value)">AC</button>
                         <button class="ar btn" value="AR" onclick="onTextAlign(this.value)">AR</button>
 
-                        <select class="fonts btn" oninput="onTextInput(this)">
+                        <select class="fonts btn" onchange="onFontSelection(this.value)">
                             <option value="Impact"> Impact</option>
-                            <option value="font1">font1</option>
-                            <option value="font2">font2</option>
+                            <option value="San Serif">San Serif</option>
+                            <option value="Arial">Arial</option>
                         </select>
-                        <button class="s btn">S?</button>
-                        <button class="color btn">Color</button>
+
+                        <label class="s-color btn" for="s-color">S</label>
+                        <input id="s-color" type="color" class="color-pallete s-color" onchange="setStrokeColor(event)"></input type="color">
+                        <label class="color btn" for="color">Color</label>
+                        <input id="color" type="color" class="color-pallete color" onchange="setFillColor(event)"></input>
                     </div>
                     <div class="stickers">
                         STICKERS STICKERS STICKERS
@@ -105,5 +109,3 @@
 </body>
 
 </html>
-
-

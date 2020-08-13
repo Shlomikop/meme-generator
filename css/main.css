@@ -254,13 +254,41 @@ canvas{
     grid-row: 2;
     grid-column: 1/4;
 }
-.s{
+
+/* Desgining the 'input style:color' so they disappear!  */
+
+input[type="color"] {
+	-webkit-appearance: none;
+	border: none;
+	width: 1px;
+	height: 1px;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 100%;
+    
+    
+}
+input[type="color"]::-webkit-color-swatch {
+	border: none;
+}
+
+.color-pallete{
+  z-index: 0;  
+}
+/**/
+.s-color{
     grid-row: 2;
     grid-column: 4/5;
+    color: black;
+    cursor: pointer;
+    margin: auto;
 }
 .color{
     grid-row: 2;
     grid-column: 5/6;
+    color: black;
+    cursor: pointer;
+    margin: auto;
 }
 
 .stickers{
