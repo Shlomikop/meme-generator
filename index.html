@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shlomi Meme Generator</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body onload="init()">
+
+    <!-- HEADER -->
+
+    <header class="navbar-container flex">
+        <section class="logo flex align-center">LOGO</section>
+        <ul class="navbar flex align-center space-evenly">
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+    </header>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Search..">
+        <button>&#128269</button>
+    </div>
+
+    <!-- IMAGES GALLERY -->
+
+    <section id="gallery" class="gallery grid">
+    </section>
+
+
+    <!-- ABOUT -->
+
+
+    <div id="about" class="about flex column align-center">
+        <h1>About The Programmer</h1>
+        <img class="shlomi-img" src="./assets/IMG-20160701-WA0002.jpg" alt="">
+        <p>Hi! My name is Shlomi and i have made this free meme-generator during my web-developement-course.
+            I hope you will enjoy this page and make awesome memes that will make your friends proud (or embaraced..)!!
+            Best of luck and enjoy :)
+        </p>
+    </div>
+
+
+    <!-- MODAL -->
+
+
+    <div class="modal-container" hidden>
+
+        <div class="modal-flex-container flex column">
+            <header class="modal-navbar navbar-container flex">
+                <section class="logo flex align-center">LOGO</section>
+                <ul class="navbar flex align-center space-evenly">
+                    <li><a onclick="onCloseModal()" href="#gallery">Gallery</a></li>
+                    <li><a onclick="onCloseModal()" href="#about">About</a></li>
+                </ul>
+            </header>
+
+            <div class="modal flex align-center justify-center space-evenly">
+
+                <canvas class="canvas" id="my-canvas"></canvas>
+                <!-- THE EDITOR DIV WITH ALL THE BUTTONS -->
+                <div class="image-editor grid">
+                    <input class="line-text" type="text" oninput="onTextInput(this.value)" placeholder="Enter text here..">
+                    <button class="btn-switch" onclick="onSwitchLine()">&#8645</button>
+                    <button class="btn-add" onclick="onAddLine()">&#43</button>
+                    <button class="btn-clear" onclick="onClearCanvas()">Clear</button>
+                    <div class="inner-editor-div grid">
+                        <button class="a+ btn" value="+" onclick="onSetFontSize(this.value)">A+</button>
+                        <button class="a- btn" value="-" onclick="onSetFontSize(this.value)">A-</button>
+                        <button class="al btn" value="AL" onclick="onTextAlign(this.value)">AL</button>
+                        <button class="ac btn" value="AC" onclick="onTextAlign(this.value)">AC</button>
+                        <button class="ar btn" value="AR" onclick="onTextAlign(this.value)">AR</button>
+
+                        <select class="fonts btn" oninput="onTextInput(this)">
+                            <option value="Impact"> Impact</option>
+                            <option value="font1">font1</option>
+                            <option value="font2">font2</option>
+                        </select>
+                        <button class="s btn">S?</button>
+                        <button class="color btn">Color</button>
+                    </div>
+                    <div class="stickers">
+                        STICKERS STICKERS STICKERS
+                        <!-- add 4 stickers here -->
+                    </div>
+                    <a class="btn-share" href="#">Share</a>
+                    <a class="btn-download" href="#" onclick="downloadCanvas(this)" download="">Download</a>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="js/util.js"></script>
+    <script src="js/servic-meme.js"></script>
+    <script src="js/controller-meme.js"></script>
+
+</body>
+
+</html>
+
+
