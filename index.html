@@ -61,13 +61,16 @@
 
             <div class="modal flex align-center justify-center space-evenly">
 
-                <canvas class="canvas" id="my-canvas"></canvas>
+                 <div class="canvas-container"><canvas height="360" width="360" class="canvas" id="my-canvas"></canvas></div>
                 <!-- THE EDITOR DIV WITH ALL THE BUTTONS -->
                 <div class="image-editor grid">
                     <input class="line-text" type="text" oninput="onTextInput(this.value)"
                         placeholder="Enter text here..">
+
+                    <button class="btn-up" value="up" onclick="onMoveLine(this.value)">&#8593</button>
+                    <button class="btn-down" value="down" onclick="onMoveLine(this.value)">&#8595</button>
                     <button class="btn-switch" onclick="onSwitchLine()">&#8645</button>
-                    <button class="btn-add" onclick="onAddLine()">&#43</button>
+                    <button class="btn-add" onclick="onAddLine()">+</button>
                     <button class="btn-clear" onclick="onClearCanvas()">Clear</button>
                     <div class="inner-editor-div grid">
                         <button class="a+ btn" value="+" onclick="onSetFontSize(this.value)">A+</button>
@@ -82,9 +85,8 @@
                             <option value="Arial">Arial</option>
                         </select>
 
-                        <label class="s-color btn" for="s-color">S</label>
+                        
                         <input id="s-color" type="color" class="color-pallete s-color" onchange="setStrokeColor(event)"></input type="color">
-                        <label class="color btn" for="color">Color</label>
                         <input id="color" type="color" class="color-pallete color" onchange="setFillColor(event)"></input>
                     </div>
                     <div class="stickers">

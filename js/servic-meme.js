@@ -5,7 +5,7 @@ var gMeme;
 var gImgs = _createImages();
 let gNextId = 0;
 let gCurrID;
-let gLineIdx = 0
+let gLineIdx = 0;
 
 
 
@@ -24,12 +24,14 @@ function _createMeme(imgId) {
         selectedImgId: imgId,
         selectedLineIdx: gLineIdx,
         lines: [{
-            txt:'impact',
-            font:' ',
-            size: 20,
-            align: 'right',
-            color: 'red'
-        }]
+                txt: '',
+                font: 'impact',
+                size: 20,
+                align: 'right',
+                color: 'white'
+            }
+         
+        ]
 
     }
     gMeme = meme;
@@ -37,29 +39,50 @@ function _createMeme(imgId) {
 };
 
 
+
 //---------------------------
 
 function setTxtMeme(txt) {
-gMeme.lines[gLineIdx].txt=txt
-return gMeme.lines[gLineIdx].txt
-}
-
-function setFontSize(fontSize){
-    gMeme.lines[gLineIdx].size=fontSize
+    gMeme.lines[gLineIdx].txt = txt
 }
 
 
-function setTxtAlign(txtAlign){
-    gMeme.lines[gLineIdx].align=txtAlign
+function pushLine(){
+    var line=  {
+        txt: '',
+        font: 'impact',
+        size: 20,
+        align: 'right',
+        color: 'white'
+    }
+    gMeme.lines.push(line)
 }
 
-function setFont(font){
-    gMeme.lines[gLineIdx].font=font
+
+function setFont(font) {
+    gMeme.lines[gLineIdx].font = font
 }
 
-function setColor(color){
-    gMeme.lines[gLineIdx].color=color
+function setFontSize(fontSize) {
+    gMeme.lines[gLineIdx].size = fontSize
 }
+
+function setTxtAlign(txtAlign) {
+    gMeme.lines[gLineIdx].align = txtAlign
+}
+
+function setColor(color) {
+    gMeme.lines[gLineIdx].color = color
+}
+
+function setLineIdx() {
+    gLineIdx += 1
+}
+
+function clearLineIdx() {
+    gLineIdx = 0
+}
+
 
 //---------------------------
 
@@ -97,7 +120,3 @@ function _createImage(url, keywords) {
     };
 }
 
-function downloadImg(elLink) {
-    var imgContent = gCanvas.toDataURL('image/jpeg');
-    elLink.href = imgContent
-}

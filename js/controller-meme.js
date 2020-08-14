@@ -1,8 +1,11 @@
 'use strict';
-let currImgUrl;
+let gCurrImgUrl;
+let gCurrId;
 
 var gCanvas = document.getElementById('my-canvas');
 var gCtx = gCanvas.getContext('2d');
+
+let gClickCount = 0;
 
 let gCurrText = '';
 let gFontSize = 20
@@ -10,6 +13,9 @@ let gTxtAlign = 'left'
 let gFont = 'impact'
 let gStrokeColor = 'black'
 let gFillColor = 'white'
+
+let xCanvas = 20;
+let yCanvas = 80;
 // elInput.addEventListener('input', updateText); 
 
 
@@ -32,21 +38,23 @@ function renderImgs(imgs) {
 
 
 function onOpenMemeEditor(imgId, imgUrl) {
-    currImgUrl = imgUrl
+    gCurrId = imgId
+    gCurrImgUrl = imgUrl
     onOpenModal()
     getMeme(imgId)
-    renderCanvas(imgUrl);
+    renderCanvas();
 }
 
 function renderCanvas() {
     const img = new Image();
-    img.src = currImgUrl;
+    img.src = gCurrImgUrl;
     img.onload = () => {
         gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height);
-        drawText(gCurrText)
+        drawText(gMeme.lines[gClickCount].txt)
         // gMeme.lines.map(line => drawText(line))
     }
 }
+
 
 
 
@@ -61,13 +69,48 @@ function onCloseModal() {
 }
 
 function onTextInput(txt) {
-
-    var updatedTxt = setTxtMeme(txt)
-    gCurrText = updatedTxt
-    renderCanvas()
+    if (gClickCount === 0) {
+        setTxtMeme(txt)
+        gCurrText = txt
+        renderCanvas()
+    }
+    if (gClickCount > 0) {
+        setTxtMeme(txt)
+        gCurrText = txt
+        drawText(txt)
+    }
 }
 
-function drawText(text, x = 20, y = 40) {
+
+function onMoveLine(val) {
+    if (yCanvas < 40) yCanvas=31
+    if (val === 'up') {
+        yCanvas -= 10
+        renderCanvas()
+    }
+    if (yCanvas > 330) yCanvas=339
+    if (val === 'down') {
+        yCanvas += 10
+        renderCanvas()
+    }
+}
+
+
+var addLineButton = document.querySelector('.btn-add') //counting the clicks here and in the function below
+
+function onAddLine() {
+
+    gClickCount += 1
+    setLineIdx()
+    pushLine()
+    if (gClickCount === 1) yCanvas = gCanvas.height - 80;
+    if (gClickCount > 1) yCanvas = gCanvas.height / 2;
+    document.querySelector('.line-text').value = '';
+
+}
+
+
+function drawText(text, x = xCanvas, y = yCanvas) {
     gCtx.lineWidth = '2';
     gCtx.strokeStyle = `${gStrokeColor}`;
     gCtx.fillStyle = `${gFillColor}`;
@@ -82,19 +125,25 @@ function drawText(text, x = 20, y = 40) {
 
 }
 
+
+
 function onClearCanvas() {
     document.querySelector('.line-text').value = '';
     gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
-    getMeme(gCurrID)
-    renderCanvas()
     gFontSize = 20
+    gClickCount = 0
+    yCanvas = 80;
+    clearLineIdx()
+    getMeme(gCurrId)
+    renderCanvas()
 }
 
 function onSetFontSize(btn) {
     let fontSize;
-    if (btn === '+' && gFontSize < 80) {
+    if (btn === '+' && gFontSize < 100) {
         gFontSize += 10
         renderCanvas()
+
     }
     if (btn === '-' && gFontSize > 20) {
         gFontSize -= 10
@@ -137,8 +186,25 @@ function setStrokeColor(ev) {
 
 function setFillColor(ev) {
     const color = ev.target.value
-    gFillColor=color
+    gFillColor = color
     setColor(color)
     renderCanvas()
 
+}
+
+
+function downloadCanvas(elLink) {
+    const data = gCanvas.toDataURL();
+    elLink.href = data;
+    elLink.download = 'my-image.jpg';
+}
+
+
+
+
+function resizeCanvas() {
+    const elContainer = document.querySelector('.canvas-container');
+    // Note: changing the canvas dimension this way clears the canvas
+    gCanvas.width = elContainer.offsetWidth;
+    gCanvas.height = elContainer.offsetHeight;
 }
