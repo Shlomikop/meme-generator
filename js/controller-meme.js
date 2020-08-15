@@ -6,16 +6,10 @@ var gCanvas = document.getElementById('my-canvas');
 var gCtx = gCanvas.getContext('2d');
 
 let gClickCount = 0;
-
-let gCurrText = '';
-let gFontSize = 20
-let gTxtAlign = 'left'
-let gFont = 'impact'
+let gSwitchCounter=0
 let gStrokeColor = 'black'
-let gFillColor = 'white'
 
-let xCanvas = 20;
-let yCanvas = 80;
+
 // elInput.addEventListener('input', updateText); 
 
 
@@ -50,8 +44,7 @@ function renderCanvas() {
     img.src = gCurrImgUrl;
     img.onload = () => {
         gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height);
-        drawText(gMeme.lines[gClickCount].txt)
-        // gMeme.lines.map(line => drawText(line))
+        gMeme.lines.map(line => drawText(line.txt, line.x, line.y))
     }
 }
 
@@ -69,32 +62,26 @@ function onCloseModal() {
 }
 
 function onTextInput(txt) {
-    if (gClickCount === 0) {
-        setTxtMeme(txt)
-        gCurrText = txt
-        renderCanvas()
-    }
-    if (gClickCount > 0) {
-        setTxtMeme(txt)
-        gCurrText = txt
-        drawText(txt)
-    }
+
+    setTxtMeme(txt)
+    renderCanvas()
+
 }
 
 
 function onMoveLine(val) {
-    if (yCanvas < 40) yCanvas=31
+
+    if (gMeme.lines[gClickCount].y < 40) gMeme.lines[gClickCount].y = 31
     if (val === 'up') {
-        yCanvas -= 10
+        gMeme.lines[gClickCount].y -= 10
         renderCanvas()
     }
-    if (yCanvas > 330) yCanvas=339
+    if (gMeme.lines[gClickCount].y > 330) gMeme.lines[gClickCount].y = 339
     if (val === 'down') {
-        yCanvas += 10
+        gMeme.lines[gClickCount].y += 10
         renderCanvas()
     }
 }
-
 
 var addLineButton = document.querySelector('.btn-add') //counting the clicks here and in the function below
 
@@ -103,54 +90,68 @@ function onAddLine() {
     gClickCount += 1
     setLineIdx()
     pushLine()
-    if (gClickCount === 1) yCanvas = gCanvas.height - 80;
-    if (gClickCount > 1) yCanvas = gCanvas.height / 2;
+    if (gClickCount === 1) {
+        gMeme.lines[1].y = gCanvas.height - 80;
+        gMeme.lines[1].x = 20
+    } //setting Y+X in the model
+    if (gClickCount > 1) {
+        gMeme.lines[gClickCount].y = gCanvas.height / 2;
+        gMeme.lines[gClickCount].x = 20
+    }
+    //setting Y+X in the model
     document.querySelector('.line-text').value = '';
 
 }
 
 
-function drawText(text, x = xCanvas, y = yCanvas) {
+function drawText(text, x = gMeme.lines[getLineIndex()].x, y = gMeme.lines[getLineIndex()].y) { //***************************************//
+    gCtx.beginPath()
     gCtx.lineWidth = '2';
     gCtx.strokeStyle = `${gStrokeColor}`;
-    gCtx.fillStyle = `${gFillColor}`;
-    gCtx.font = `${gFontSize}px ${gFont}`;
+    gCtx.fillStyle = `${gMeme.lines[gClickCount].color}`;
+    gCtx.font = `${gMeme.lines[gClickCount].size}px ${gMeme.lines[gClickCount].font}`;
+    if (gMeme.lines[gClickCount].align === 'right') x = gCanvas.width - 20
+    if (gMeme.lines[gClickCount].align === 'center') x = gCanvas.width / 2
 
-    if (gTxtAlign === 'right') x = gCanvas.width - 20
-    if (gTxtAlign === 'center') x = gCanvas.width / 2
-
-    gCtx.textAlign = `${gTxtAlign}`;
+    gCtx.textAlign = `${gMeme.lines[gClickCount].align}`;
     gCtx.fillText(text, x, y);
     gCtx.strokeText(text, x, y);
 
 }
 
+function onSwitchLine(){
+    if(gMeme.lines.length<2)return
+    gSwitchCounter+=1
+    if(gSwitchCounter%2===0){
+        gMeme.lines[0].y=280
+        gMeme.lines[1].y=80
+    }else{
+        gMeme.lines[0].y=80
+        gMeme.lines[1].y=280
+    }
 
+    renderCanvas()
+}
 
 function onClearCanvas() {
     document.querySelector('.line-text').value = '';
     gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
-    gFontSize = 20
+    gMeme.lines[gClickCount].size = 30
     gClickCount = 0
-    yCanvas = 80;
     clearLineIdx()
     getMeme(gCurrId)
     renderCanvas()
 }
 
 function onSetFontSize(btn) {
-    let fontSize;
-    if (btn === '+' && gFontSize < 100) {
-        gFontSize += 10
-        renderCanvas()
+    let fontSize = gMeme.lines[getLineIndex()].size;
 
-    }
-    if (btn === '-' && gFontSize > 20) {
-        gFontSize -= 10
-        renderCanvas()
-    }
-    fontSize = gFontSize
+    if (btn === '+' && fontSize < 100) fontSize += 10
+
+    if (btn === '-' && fontSize > 20) fontSize -= 10
+
     setFontSize(fontSize)
+    renderCanvas()
 }
 
 function onTextAlign(val) {
@@ -167,13 +168,12 @@ function onTextAlign(val) {
         txtAlign = 'right'
         setTxtAlign(txtAlign)
     }
-    gTxtAlign = txtAlign
+
     renderCanvas()
 }
 
 function onFontSelection(font) {
     setFont(font)
-    gFont = font
     renderCanvas()
 }
 
@@ -186,7 +186,6 @@ function setStrokeColor(ev) {
 
 function setFillColor(ev) {
     const color = ev.target.value
-    gFillColor = color
     setColor(color)
     renderCanvas()
 
@@ -208,3 +207,12 @@ function resizeCanvas() {
     gCanvas.width = elContainer.offsetWidth;
     gCanvas.height = elContainer.offsetHeight;
 }
+
+
+// function onShare(){
+    
+//     document.querySelector('.share-container').innerHTML = `
+//     <a class="btn-share" href="https://www.facebook.com/sharer/sharer.php?u=${gCurrImgUrl}&t=${gCurrImgUrl}" title="Share on Facebook" target="_blank" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${gCurrImgUrl}&t=${gCurrImgUrl}'); return false;">
+//        Share   
+//     </a>`
+// }

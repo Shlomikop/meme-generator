@@ -8,10 +8,31 @@ let gCurrID;
 let gLineIdx = 0;
 
 
-
 function getImagesForDisplay() {
     return gImgs;
 }
+
+
+function _createMeme(imgId) {
+    let meme = {
+        selectedImgId: imgId,
+        selectedLineIdx: 0,
+        lines: [{
+            txt: '',
+            font: 'impact',
+            size: 30,
+            align: 'left',
+            color: 'white',
+            x:20,
+            y:80
+        }
+        
+    ]
+    
+}
+gMeme = meme;
+
+};
 
 
 function getMeme(imgId) {
@@ -19,68 +40,49 @@ function getMeme(imgId) {
     _createMeme(imgId);
 }
 
-function _createMeme(imgId) {
-    let meme = {
-        selectedImgId: imgId,
-        selectedLineIdx: gLineIdx,
-        lines: [{
-                txt: '',
-                font: 'impact',
-                size: 20,
-                align: 'right',
-                color: 'white'
-            }
-         
-        ]
-
-    }
-    gMeme = meme;
-
-};
-
-
 
 //---------------------------
 
 function setTxtMeme(txt) {
-    gMeme.lines[gLineIdx].txt = txt
+    gMeme.lines[gMeme.selectedLineIdx].txt = txt
 }
 
 
 function pushLine(){
     var line=  {
         txt: '',
-        font: 'impact',
-        size: 20,
-        align: 'right',
-        color: 'white'
+        font: gMeme.lines[gMeme.selectedLineIdx-1].font,
+        size: gMeme.lines[gMeme.selectedLineIdx-1].size,
+        align: gMeme.lines[gMeme.selectedLineIdx-1].align,
+        color: gMeme.lines[gMeme.selectedLineIdx-1].color
+        
     }
     gMeme.lines.push(line)
 }
 
 
 function setFont(font) {
-    gMeme.lines[gLineIdx].font = font
+    gMeme.lines[gMeme.selectedLineIdx].font = font
 }
 
 function setFontSize(fontSize) {
-    gMeme.lines[gLineIdx].size = fontSize
+    gMeme.lines[gMeme.selectedLineIdx].size = fontSize
 }
 
 function setTxtAlign(txtAlign) {
-    gMeme.lines[gLineIdx].align = txtAlign
+    gMeme.lines[gMeme.selectedLineIdx].align = txtAlign
 }
 
 function setColor(color) {
-    gMeme.lines[gLineIdx].color = color
+    gMeme.lines[gMeme.selectedLineIdx].color = color
 }
 
 function setLineIdx() {
-    gLineIdx += 1
+    gMeme.selectedLineIdx += 1
 }
 
 function clearLineIdx() {
-    gLineIdx = 0
+    gMeme.selectedLineIdx = 0
 }
 
 
@@ -120,3 +122,6 @@ function _createImage(url, keywords) {
     };
 }
 
+function getLineIndex(){
+    return gMeme.selectedLineIdx
+}
