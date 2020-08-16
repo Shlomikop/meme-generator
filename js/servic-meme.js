@@ -3,7 +3,6 @@
 
 var gMeme;
 var gImgs = _createImages();
-// let gNextId = 0;
 let gCurrID;
 let gLineIdx = 0;
 
@@ -20,7 +19,7 @@ function _createMeme(imgId) {
         lines: [{
             txt: '',
             font: 'impact',
-            size: 30,
+            size: 40,
             align: 'left',
             color: 'white',
             x:20,
@@ -64,22 +63,22 @@ function pushLine(){
 }
 
 
-function setFont(font) {
-    gMeme.lines[gMeme.selectedLineIdx].font = font
+function setFont(font,idx) {
+    gMeme.lines[idx].font = font
 }
 
-function setFontSize(fontSize) {
-    gMeme.lines[gMeme.selectedLineIdx].size = fontSize
+function setFontSize(fontSize, idx) {
+    gMeme.lines[idx].size = fontSize
 }
 
-function setTxtAlign(txtAlign) {
-    gMeme.lines[gMeme.selectedLineIdx].align = txtAlign
-    gMeme.lines[gMeme.selectedLineIdx].x = x
+function setTxtAlign(txtAlign,x,idx) {
+    gMeme.lines[idx].align = txtAlign
+    gMeme.lines[idx].x = x
     
 }
 
-function setColor(color) {
-    gMeme.lines[gMeme.selectedLineIdx].color = color
+function setColor(color,idx) {
+    gMeme.lines[idx].color = color
 }
 
 function setLineIdx() {

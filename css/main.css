@@ -102,6 +102,18 @@ margin-inline-start: 50px;
 .logo{
     width: 50%;
     margin-inline-start: 50px;
+    font-weight: 600;
+    font-size: large;
+    letter-spacing: 1px;
+}
+
+.logo-mobile{
+    width: 50%;
+    margin-inline-start: 20px;
+    font-size: large;
+    font-weight: 600;
+    font-size: normal;
+       
 }
 
 ul a{
@@ -120,6 +132,13 @@ ul li{
     margin: 50px 20px;
 }
 
+.search-btn{
+    font-family: poppins;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+}
 
 /*Image-Gallery*/
 .img{

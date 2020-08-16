@@ -9,7 +9,7 @@ let gCtx;
 let gClickCount = 0;
 let gSwitchCounter = -1
 let gStrokeColor = 'black'
-
+let gCurrLineIdx=0
 
 // elInput.addEventListener('input', updateText); 
 
@@ -77,14 +77,14 @@ function onTextInput(txt) {
 
 function onMoveLine(val) {
 
-    if (gMeme.lines[gClickCount].y < 40) gMeme.lines[gClickCount].y = 31
+    if (gMeme.lines[gCurrLineIdx].y < 40) gMeme.lines[gCurrLineIdx].y = 31
     if (val === 'up') {
-        gMeme.lines[gClickCount].y -= 10
+        gMeme.lines[gCurrLineIdx].y -= 10
         renderCanvas()
     }
-    if (gMeme.lines[gClickCount].y > 330) gMeme.lines[gClickCount].y = 339
+    if (gMeme.lines[gCurrLineIdx].y > 330) gMeme.lines[gCurrLineIdx].y = 339
     if (val === 'down') {
-        gMeme.lines[gClickCount].y += 10
+        gMeme.lines[gCurrLineIdx].y += 10
         renderCanvas()
     }
 }
@@ -93,6 +93,7 @@ var addLineButton = document.querySelector('.btn-add') //counting the clicks her
 
 function onAddLine() {
 
+    gCurrLineIdx+=1
     gClickCount += 1
     setLineIdx()
     pushLine()
@@ -139,10 +140,10 @@ function drawText(line) { //***************************************//
 function onClearCanvas() {
     document.querySelector('.line-text').value = '';
     gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
-    gMeme.lines[gClickCount].size = 30
     gClickCount = 0
     clearLineIdx()
     gSwitchCounter = -1
+    gCurrLineIdx=0
     getMeme(gCurrId)
     renderCanvas()
 }
@@ -154,16 +155,19 @@ function onSwitchLine() {
     document.querySelector('.line-text').value = '';
     if (gSwitchCounter < gMeme.lines.length - 1) {
         gSwitchCounter += 1
+        gCurrLineIdx=gSwitchCounter
         drawRect()
-    } else gSwitchCounter = 0
+    } else {
+        gSwitchCounter = 0
+        gCurrLineIdx=0
+    }
     drawRect()
 
-    // renderCanvas()
 }
 
 
 function drawRect() {
-
+    
     let x = gMeme.lines[gSwitchCounter].x;
     let y = (gMeme.lines[gSwitchCounter].y - gMeme.lines[gSwitchCounter].size) + 5;
     gCtx.beginPath();
@@ -193,13 +197,11 @@ function drawRect() {
 
 
 function onSetFontSize(btn) {
-    let fontSize = gMeme.lines[getLineIndex()].size;
-
+    let fontSize = gMeme.lines[gCurrLineIdx].size;
     if (btn === '+' && fontSize < 100) fontSize += 10
 
     if (btn === '-' && fontSize > 20) fontSize -= 10
-
-    setFontSize(fontSize)
+    setFontSize(fontSize, gCurrLineIdx)
     renderCanvas()
 }
 
@@ -207,22 +209,22 @@ function onTextAlign(val) {
     var txtAlign;
     if (val === 'AL') {
         txtAlign = 'left'
-        setTxtAlign(txtAlign, 20)
+        setTxtAlign(txtAlign, 20, gCurrLineIdx)
     }
     if (val === 'AC') {
         txtAlign = 'center'
-        setTxtAlign(txtAlign, gCanvas.width / 2)
+        setTxtAlign(txtAlign, gCanvas.width / 2,gCurrLineIdx)
     }
     if (val === 'AR') {
         txtAlign = 'right'
-        setTxtAlign(txtAlign, gCanvas.width - 20)
+        setTxtAlign(txtAlign, gCanvas.width - 20,gCurrLineIdx)
     }
 
     renderCanvas()
 }
 
 function onFontSelection(font) {
-    setFont(font)
+    setFont(font,gCurrLineIdx)
     renderCanvas()
 }
 
@@ -235,7 +237,7 @@ function setStrokeColor(ev) {
 
 function setFillColor(ev) {
     const color = ev.target.value
-    setColor(color)
+    setColor(color,gCurrLineIdx)
     renderCanvas()
 
 }
@@ -271,7 +273,7 @@ function resizeCanvas() {
 //search bar//
 
 function onSearch(input) {
-
+    input = input.toLowerCase()
     if (!input) {
         var imgs = getImagesForDisplay()
         return renderImgs(imgs);
