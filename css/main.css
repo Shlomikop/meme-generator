@@ -159,7 +159,7 @@ ul li{
 }
 
 .modal-navbar{
-    height: 10%;
+    height: 13%;
 }
 
 .modal{
@@ -186,9 +186,9 @@ canvas{
     grid-template-rows: repeat(6,1fr);
     gap: 20px;
     border-radius: 20px;
-    padding: 30px;
+    padding: 25px;
     width: 320px;
-    height: 380px;
+    height: 370px;
 
 }
 
@@ -317,6 +317,7 @@ input[type="color"]::-webkit-color-swatch {
 .btn-share{
     color: white;
     text-decoration: none;   
+    
 }
 
 .btn-download{
@@ -353,6 +354,12 @@ input[type="color"]::-webkit-color-swatch {
     border-radius: 30%;
 }
 
+@media(min-width:800px){
+    canvas{
+        height: 360px;
+        width: 360px;
+    }
+}
 
 @media(max-width:800px){
     .modal{
@@ -364,12 +371,24 @@ input[type="color"]::-webkit-color-swatch {
     .navbar{
         margin-inline-start: 0;
     }
+    .canvas-container{
+        margin-top: 80px;
+    }
+    canvas{
+        height: 320px;
+        width: 320px;
+    }
+    .modal-navbar{
+        margin: 10px 5px;
+        height: 75px;
+    }
 }
+
 
 @media(max-width:490px){
     canvas{
-width: 300px;
-height:300px;
+width: 310px;
+height:310px;
     }
     .gallery{
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -384,6 +403,10 @@ height:300px;
         margin-top: 60px;
         margin-bottom: 70px;
     }
+    .navbar{
+        padding-inline-start: 0;
+    }
+ 
 }
 
 
@@ -395,4 +418,10 @@ height:300px;
     .gallery{
         grid-template-columns:1fr;
     }
+    .navbar{
+        padding-inline-start: 0;
+
+    }
+   
+   
 }

@@ -3,7 +3,7 @@
 
 var gMeme;
 var gImgs = _createImages();
-let gNextId = 0;
+// let gNextId = 0;
 let gCurrID;
 let gLineIdx = 0;
 
@@ -47,6 +47,9 @@ function setTxtMeme(txt) {
     gMeme.lines[gMeme.selectedLineIdx].txt = txt
 }
 
+function setSwitchTxtMeme(txt, idx){
+    gMeme.lines[idx].txt = txt
+}
 
 function pushLine(){
     var line=  {
@@ -71,6 +74,8 @@ function setFontSize(fontSize) {
 
 function setTxtAlign(txtAlign) {
     gMeme.lines[gMeme.selectedLineIdx].align = txtAlign
+    gMeme.lines[gMeme.selectedLineIdx].x = x
+    
 }
 
 function setColor(color) {
@@ -94,11 +99,11 @@ function _createImages() {
 
     images.push(
         _createImage('./images/1.jpg', ['funny', 'trump']),
-        _createImage('./images/2.jpg', ['animals']),
+        _createImage('./images/2.jpg', ['animals','dog']),
         _createImage('./images/3.jpg', ['animals', 'baby', 'cute']),
         _createImage('./images/4.jpg', ['animals', 'cat']),
         _createImage('./images/5.jpg', ['funny', 'baby']),
-        _createImage('./images/6.jpg', ['chandler', 'funny']),
+        _createImage('./images/6.jpg', ['chandler', 'funny','friends']),
         _createImage('./images/7.jpg', ['baby', 'funny']),
         _createImage('./images/8.jpg', ['funny']),
         _createImage('./images/9.jpg', ['baby', 'funny']),

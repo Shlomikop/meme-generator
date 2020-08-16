@@ -2,11 +2,12 @@
 let gCurrImgUrl;
 let gCurrId;
 
-var gCanvas = document.getElementById('my-canvas');
-var gCtx = gCanvas.getContext('2d');
+let gCanvas;
+let gCtx;
+
 
 let gClickCount = 0;
-let gSwitchCounter=0
+let gSwitchCounter = -1
 let gStrokeColor = 'black'
 
 
@@ -15,6 +16,8 @@ let gStrokeColor = 'black'
 
 
 function init() {
+    gCanvas = document.getElementById('my-canvas');
+    gCtx = gCanvas.getContext('2d');
     var imgs = getImagesForDisplay()
     renderImgs(imgs);
 }
@@ -44,7 +47,7 @@ function renderCanvas() {
     img.src = gCurrImgUrl;
     img.onload = () => {
         gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height);
-        gMeme.lines.map(line => drawText(line.txt, line.x, line.y))
+        gMeme.lines.map(line => drawText(line))
     }
 }
 
@@ -62,10 +65,13 @@ function onCloseModal() {
 }
 
 function onTextInput(txt) {
-
-    setTxtMeme(txt)
-    renderCanvas()
-
+    if (gSwitchCounter === -1) {
+        setTxtMeme(txt)
+        renderCanvas()
+    } else {
+        setSwitchTxtMeme(txt, gSwitchCounter)
+        renderCanvas()
+    }
 }
 
 
@@ -104,33 +110,30 @@ function onAddLine() {
 }
 
 
-function drawText(text, x = gMeme.lines[getLineIndex()].x, y = gMeme.lines[getLineIndex()].y) { //***************************************//
-    gCtx.beginPath()
+function drawText(line) { //***************************************//
+
+    let {
+        txt,
+        x,
+        y,
+        color,
+        font,
+        size,
+        align
+    } = line
+
+    // gCtx.beginPath()
     gCtx.lineWidth = '2';
     gCtx.strokeStyle = `${gStrokeColor}`;
-    gCtx.fillStyle = `${gMeme.lines[gClickCount].color}`;
-    gCtx.font = `${gMeme.lines[gClickCount].size}px ${gMeme.lines[gClickCount].font}`;
-    if (gMeme.lines[gClickCount].align === 'right') x = gCanvas.width - 20
-    if (gMeme.lines[gClickCount].align === 'center') x = gCanvas.width / 2
+    gCtx.fillStyle = `${color}`;
+    gCtx.font = `${size}px ${font}`;
+    if (align === 'right') x = gCanvas.width - 20
+    if (align === 'center') x = gCanvas.width / 2
 
-    gCtx.textAlign = `${gMeme.lines[gClickCount].align}`;
-    gCtx.fillText(text, x, y);
-    gCtx.strokeText(text, x, y);
+    gCtx.textAlign = `${align}`;
+    gCtx.fillText(txt, x, y);
+    gCtx.strokeText(txt, x, y);
 
-}
-
-function onSwitchLine(){
-    if(gMeme.lines.length<2)return
-    gSwitchCounter+=1
-    if(gSwitchCounter%2===0){
-        gMeme.lines[0].y=280
-        gMeme.lines[1].y=80
-    }else{
-        gMeme.lines[0].y=80
-        gMeme.lines[1].y=280
-    }
-
-    renderCanvas()
 }
 
 function onClearCanvas() {
@@ -139,9 +142,55 @@ function onClearCanvas() {
     gMeme.lines[gClickCount].size = 30
     gClickCount = 0
     clearLineIdx()
+    gSwitchCounter = -1
     getMeme(gCurrId)
     renderCanvas()
 }
+
+function onSwitchLine() {
+
+    if (gMeme.lines.length === 1) return
+
+    document.querySelector('.line-text').value = '';
+    if (gSwitchCounter < gMeme.lines.length - 1) {
+        gSwitchCounter += 1
+        drawRect()
+    } else gSwitchCounter = 0
+    drawRect()
+
+    // renderCanvas()
+}
+
+
+function drawRect() {
+
+    let x = gMeme.lines[gSwitchCounter].x;
+    let y = (gMeme.lines[gSwitchCounter].y - gMeme.lines[gSwitchCounter].size) + 5;
+    gCtx.beginPath();
+
+    if (gMeme.lines[gSwitchCounter].align === 'left') {
+        gCtx.rect(x, y, gCtx.measureText(gMeme.lines[gSwitchCounter].txt).width, gMeme.lines[gSwitchCounter].size); // x, y, width, height
+        gCtx.strokeStyle = 'white';
+        gCtx.stroke();
+        gCtx.fillStyle = '#f5f5f566';
+        gCtx.fillRect(x, y, gCtx.measureText(gMeme.lines[gSwitchCounter].txt).width, gMeme.lines[gSwitchCounter].size); // x, y, width, height
+    }
+    if (gMeme.lines[gSwitchCounter].align === 'center') {
+        gCtx.rect(x - (gCtx.measureText(gMeme.lines[gSwitchCounter].txt).width) / 2, y, gCtx.measureText(gMeme.lines[gSwitchCounter].txt).width, gMeme.lines[gSwitchCounter].size); // x, y, width, height
+        gCtx.strokeStyle = 'white';
+        gCtx.stroke();
+        gCtx.fillStyle = '#f5f5f566';
+        gCtx.fillRect(x - (gCtx.measureText(gMeme.lines[gSwitchCounter].txt).width) / 2, y, gCtx.measureText(gMeme.lines[gSwitchCounter].txt).width, gMeme.lines[gSwitchCounter].size); // x, y, width, height
+    }
+    if (gMeme.lines[gSwitchCounter].align === 'right') {
+        gCtx.rect(x, y, (gCtx.measureText(gMeme.lines[gSwitchCounter].txt).width) * -1, gMeme.lines[gSwitchCounter].size); // x, y, width, height
+        gCtx.strokeStyle = 'white';
+        gCtx.stroke();
+        gCtx.fillStyle = '#f5f5f566';
+        gCtx.fillRect(x, y, (gCtx.measureText(gMeme.lines[gSwitchCounter].txt).width) * -1, gMeme.lines[gSwitchCounter].size); // x, y, width, height
+    }
+}
+
 
 function onSetFontSize(btn) {
     let fontSize = gMeme.lines[getLineIndex()].size;
@@ -158,15 +207,15 @@ function onTextAlign(val) {
     var txtAlign;
     if (val === 'AL') {
         txtAlign = 'left'
-        setTxtAlign(txtAlign)
+        setTxtAlign(txtAlign, 20)
     }
     if (val === 'AC') {
         txtAlign = 'center'
-        setTxtAlign(txtAlign)
+        setTxtAlign(txtAlign, gCanvas.width / 2)
     }
     if (val === 'AR') {
         txtAlign = 'right'
-        setTxtAlign(txtAlign)
+        setTxtAlign(txtAlign, gCanvas.width - 20)
     }
 
     renderCanvas()
@@ -210,9 +259,29 @@ function resizeCanvas() {
 
 
 // function onShare(){
-    
+
 //     document.querySelector('.share-container').innerHTML = `
 //     <a class="btn-share" href="https://www.facebook.com/sharer/sharer.php?u=${gCurrImgUrl}&t=${gCurrImgUrl}" title="Share on Facebook" target="_blank" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${gCurrImgUrl}&t=${gCurrImgUrl}'); return false;">
 //        Share   
 //     </a>`
 // }
+
+
+//----------------------------------//
+//search bar//
+
+function onSearch(input) {
+
+    if (!input) {
+        var imgs = getImagesForDisplay()
+        return renderImgs(imgs);
+    }
+
+    var imgs = getImagesForDisplay()
+    var searchedImgs = imgs.filter(function (img) {
+        return (img.keywords[0] === input || img.keywords[1] === input || img.keywords[2] === input)
+
+    })
+
+    return renderImgs(searchedImgs)
+}
